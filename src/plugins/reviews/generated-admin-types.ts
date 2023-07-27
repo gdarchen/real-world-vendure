@@ -446,7 +446,7 @@ export type Collection = Node & {
   breadcrumbs: Array<CollectionBreadcrumb>;
   children?: Maybe<Array<Collection>>;
   createdAt: Scalars['DateTime']['output'];
-  customFields?: Maybe<Scalars['JSON']['output']>;
+  customFields?: Maybe<CollectionCustomFields>;
   description: Scalars['String']['output'];
   featuredAsset?: Maybe<Asset>;
   filters: Array<ConfigurableOperation>;
@@ -476,8 +476,14 @@ export type CollectionBreadcrumb = {
   slug: Scalars['String']['output'];
 };
 
+export type CollectionCustomFields = {
+  __typename?: 'CollectionCustomFields';
+  custom_field_name?: Maybe<Scalars['Boolean']['output']>;
+};
+
 export type CollectionFilterParameter = {
   createdAt?: InputMaybe<DateOperators>;
+  custom_field_name?: InputMaybe<BooleanOperators>;
   description?: InputMaybe<StringOperators>;
   id?: InputMaybe<IdOperators>;
   inheritFilters?: InputMaybe<BooleanOperators>;
@@ -522,6 +528,7 @@ export type CollectionResult = {
 
 export type CollectionSortParameter = {
   createdAt?: InputMaybe<SortOrder>;
+  custom_field_name?: InputMaybe<SortOrder>;
   description?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
   name?: InputMaybe<SortOrder>;
@@ -734,9 +741,13 @@ export type CreateChannelInput = {
 
 export type CreateChannelResult = Channel | LanguageNotAvailableError;
 
+export type CreateCollectionCustomFieldsInput = {
+  custom_field_name?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
 export type CreateCollectionInput = {
   assetIds?: InputMaybe<Array<Scalars['ID']['input']>>;
-  customFields?: InputMaybe<Scalars['JSON']['input']>;
+  customFields?: InputMaybe<CreateCollectionCustomFieldsInput>;
   featuredAssetId?: InputMaybe<Scalars['ID']['input']>;
   filters: Array<ConfigurableOperationInput>;
   inheritFilters?: InputMaybe<Scalars['Boolean']['input']>;
@@ -6235,9 +6246,13 @@ export type UpdateChannelInput = {
 
 export type UpdateChannelResult = Channel | LanguageNotAvailableError;
 
+export type UpdateCollectionCustomFieldsInput = {
+  custom_field_name?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
 export type UpdateCollectionInput = {
   assetIds?: InputMaybe<Array<Scalars['ID']['input']>>;
-  customFields?: InputMaybe<Scalars['JSON']['input']>;
+  customFields?: InputMaybe<UpdateCollectionCustomFieldsInput>;
   featuredAssetId?: InputMaybe<Scalars['ID']['input']>;
   filters?: InputMaybe<Array<ConfigurableOperationInput>>;
   id: Scalars['ID']['input'];

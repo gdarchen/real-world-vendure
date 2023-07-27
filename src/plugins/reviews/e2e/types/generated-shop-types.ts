@@ -165,7 +165,7 @@ export type Collection = Node & {
   breadcrumbs: Array<CollectionBreadcrumb>;
   children?: Maybe<Array<Collection>>;
   createdAt: Scalars['DateTime']['output'];
-  customFields?: Maybe<Scalars['JSON']['output']>;
+  customFields?: Maybe<CollectionCustomFields>;
   description: Scalars['String']['output'];
   featuredAsset?: Maybe<Asset>;
   filters: Array<ConfigurableOperation>;
@@ -193,8 +193,14 @@ export type CollectionBreadcrumb = {
   slug: Scalars['String']['output'];
 };
 
+export type CollectionCustomFields = {
+  __typename?: 'CollectionCustomFields';
+  custom_field_name?: Maybe<Scalars['Boolean']['output']>;
+};
+
 export type CollectionFilterParameter = {
   createdAt?: InputMaybe<DateOperators>;
+  custom_field_name?: InputMaybe<BooleanOperators>;
   description?: InputMaybe<StringOperators>;
   id?: InputMaybe<IdOperators>;
   languageCode?: InputMaybe<StringOperators>;
@@ -222,6 +228,7 @@ export type CollectionListOptions = {
   sort?: InputMaybe<CollectionSortParameter>;
   /** Takes n results, for use in pagination */
   take?: InputMaybe<Scalars['Int']['input']>;
+  topLevelOnly?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /**
@@ -236,6 +243,7 @@ export type CollectionResult = {
 
 export type CollectionSortParameter = {
   createdAt?: InputMaybe<SortOrder>;
+  custom_field_name?: InputMaybe<SortOrder>;
   description?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
   name?: InputMaybe<SortOrder>;

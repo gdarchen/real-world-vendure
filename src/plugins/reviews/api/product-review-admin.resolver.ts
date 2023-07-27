@@ -1,8 +1,12 @@
+/* eslint-disable prettier/prettier */
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import {
     Allow,
+    Collection,
+    CollectionService,
     Ctx,
     ListQueryBuilder,
+    ListQueryOptions,
     patchEntity,
     Permission,
     Product,
@@ -22,11 +26,21 @@ import {
 
 @Resolver()
 export class ProductReviewAdminResolver {
-    constructor(private connection: TransactionalConnection, private listQueryBuilder: ListQueryBuilder) {}
+    constructor(private connection: TransactionalConnection, private listQueryBuilder: ListQueryBuilder, private collectionService: CollectionService,) {}
 
     @Query()
     @Allow(Permission.ReadCatalog)
     async productReviews(@Ctx() ctx: RequestContext, @Args() args: QueryProductReviewsArgs) {
+      const options: ListQueryOptions<Collection> = {
+        filter: {
+          ...args.options?.filter,
+          isPrivate: { eq: false },
+          // custom_field_name: { eq: false } ⬅️ Cannot filter on the custom field here
+        },
+      }
+  
+      const collections = await this.collectionService.findAll(ctx, options || undefined)
+
         return this.listQueryBuilder
             .build(ProductReview, args.options || undefined, {
                 relations: ['product'],

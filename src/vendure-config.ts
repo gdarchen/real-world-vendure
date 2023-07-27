@@ -1,7 +1,9 @@
+/* eslint-disable prettier/prettier */
 import {
     DefaultJobQueuePlugin,
     DefaultSearchPlugin,
     dummyPaymentHandler,
+    LanguageCode,
     VendureConfig,
 } from '@vendure/core';
 import { defaultEmailHandlers, EmailPlugin } from '@vendure/email-plugin';
@@ -44,28 +46,42 @@ export const config: VendureConfig = {
     paymentOptions: {
         paymentMethodHandlers: [dummyPaymentHandler],
     },
-    customFields: {},
+    customFields: {
+        Collection: [  
+            {
+                name: 'custom_field_name',
+                label: [
+                    {
+                        languageCode: LanguageCode.fr,
+                        value: 'Custom field name',
+                    },
+                ],
+                defaultValue: false,
+                type: 'boolean',
+            },
+        ],
+    },
     plugins: [
-        AssetServerPlugin.init({
-            route: 'assets',
-            assetUploadDir: path.join(__dirname, '../static/assets'),
-        }),
+        // AssetServerPlugin.init({
+        //     route: 'assets',
+        //     assetUploadDir: path.join(__dirname, '../static/assets'),
+        // }),
         DefaultSearchPlugin,
         DefaultJobQueuePlugin,
-        EmailPlugin.init({
-            route: 'mailbox',
-            devMode: true,
-            outputPath: path.join(__dirname, '../static/email/test-emails'),
-            handlers: defaultEmailHandlers,
-            templatePath: path.join(__dirname, '../static/email/templates'),
-            globalTemplateVars: {
-                // The following variables will change depending on your storefront implementation
-                fromAddress: '"example" <noreply@example.com>',
-                verifyEmailAddressUrl: 'http://localhost:8080/verify',
-                passwordResetUrl: 'http://localhost:8080/password-reset',
-                changeEmailAddressUrl: 'http://localhost:8080/verify-email-address-change',
-            },
-        }),
+        // EmailPlugin.init({
+        //     route: 'mailbox',
+        //     devMode: true,
+        //     outputPath: path.join(__dirname, '../static/email/test-emails'),
+        //     handlers: defaultEmailHandlers,
+        //     templatePath: path.join(__dirname, '../static/email/templates'),
+        //     globalTemplateVars: {
+        //         // The following variables will change depending on your storefront implementation
+        //         fromAddress: '"example" <noreply@example.com>',
+        //         verifyEmailAddressUrl: 'http://localhost:8080/verify',
+        //         passwordResetUrl: 'http://localhost:8080/password-reset',
+        //         changeEmailAddressUrl: 'http://localhost:8080/verify-email-address-change',
+        //     },
+        // }),
         AdminUiPlugin.init({
             route: 'admin',
             port: 3002,
